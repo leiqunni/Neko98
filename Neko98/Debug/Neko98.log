@@ -1,14 +1,1 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: 中間ディレクトリ (.\Debug\) に別のプロジェクト (NekoCFG.vcxproj) と共有されているファイルが含まれています。これにより、クリーンしてリビルド動作が適切に行われない可能性があります。
-cl : コマンド ライン warning D9035: オプション 'Gm' の使用は現在推奨されていません。今後のバージョンからは削除されます。
-  Tray.cpp
-  Pet.cpp
-  NekoSettings.cpp
-  Neko98.cpp
-  Neko.cpp
-  DesktopPet.cpp
-  DesktopHack.cpp
-  AlwaysOnTopPet.cpp
-C:\Users\leiqunni\Documents\GitHub\Neko98\Neko98\AlwaysOnTopPet.cpp(42,33): warning C4302: '型キャスト': 'LPSTR' から 'WORD' へ切り詰めます。
-  コードを生成中...
-AlwaysOnTopPet.obj : warning LNK4075: /EDITANDCONTINUE は /SAFESEH の指定によって無視されます。
-  Neko98.vcxproj -> C:\Users\leiqunni\Documents\GitHub\Neko98\Neko98\Debug\Neko98.exe
+﻿
