@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "DesktopPet.h"
+#include "NekoCommon.h" // Added for ICONINFO, BITMAP
 
 //constants
 #define UPDATE_COUNTER_MAX 50 //number of redraws until desktop handle is recalculated
@@ -59,11 +60,52 @@ void CDesktopPet::Erase()
 
 	//invalidate it and tell it to update
 	InvalidateRect(m_hWndDesktop, &rcErase, TRUE);
+
+	// Now, invalidate footprints
+	for (const auto& rcFootprint : m_footprintRects) {
+		InvalidateRect(m_hWndDesktop, &rcFootprint, TRUE);
+	}
+	// Clear the list after erasing
+	m_footprintRects.clear();
+
 	UpdateWindow(m_hWndDesktop);
 }
 
 void CDesktopPet::DrawOnTarget(int x, int y, HICON hIcon)
 {
+	// Get icon dimensions
+	ICONINFO iconInfo;
+	BITMAP bm;
+	if (GetIconInfo(hIcon, &iconInfo)) {
+		if (iconInfo.hbmMask) { // Check if there is a mask bitmap
+			GetObject(iconInfo.hbmMask, sizeof(BITMAP), &bm);
+			DeleteObject(iconInfo.hbmMask); // Clean up mask bitmap
+		} else { // Fallback if no mask bitmap (e.g. color icon with no mask)
+			// If hbmColor exists, try to get dimensions from it
+			// This case might happen for icons without a separate mask
+			if (iconInfo.hbmColor) {
+				GetObject(iconInfo.hbmColor, sizeof(BITMAP), &bm);
+			} else { // Default/fallback size if no bitmap info can be retrieved
+				bm.bmWidth = 32; // Default width
+				bm.bmHeight = 32; // Default height
+			}
+		}
+		if (iconInfo.hbmColor) { // Clean up color bitmap if it exists
+			DeleteObject(iconInfo.hbmColor);
+		}
+
+		// Construct a RECT for the footprint
+		RECT rcFootprint = { x, y, x + bm.bmWidth, y + bm.bmHeight };
+
+		// Add this rcFootprint to the m_footprintRects list
+		m_footprintRects.push_back(rcFootprint);
+
+		// Limit the number of footprints to 10
+		if (m_footprintRects.size() > 10) {
+			m_footprintRects.erase(m_footprintRects.begin());
+		}
+	}
+
 	//grab the device context of the desktop
 	HDC hDC = GetDC(m_hWndDesktop);
 

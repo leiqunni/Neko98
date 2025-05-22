@@ -9,6 +9,7 @@
 #pragma once
 #endif // _MSC_VER >= 1000
 
+#include <vector> // Added for std::vector
 #include "Pet.h"
 #include "DesktopHack.h"
 
@@ -21,6 +22,7 @@ public:
 
 protected:
 	int m_nUpdateHWndCounter;
+	std::vector<RECT> m_footprintRects; // Added to store footprint rectangles
 	virtual void Erase();
 	virtual void Draw(int nImage);
 };
